@@ -1,9 +1,11 @@
 import React from "react";
 import Banner from "../Banner/Banner";
+import ContactUs from "../ContactUs/ContactUs";
 import Exception from "../Exception/Exception";
 import HomeAppointment from "../HomeAppointment/HomeAppointment";
 import InfoCards from "../InfoCard/InfoCards";
 import Services from "../Services/Services";
+import Testimonial from "../Testimonial/Testimonial";
 
 const Home = () => {
   return (
@@ -13,6 +15,7 @@ const Home = () => {
       <Services></Services>
       <Exception></Exception>
       <HomeAppointment></HomeAppointment>
+      <Testimonial></Testimonial>
     </div>
   );
 };
