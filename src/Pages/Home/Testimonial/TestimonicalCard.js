@@ -8,7 +8,7 @@ const TestimonicalCard = ({ review }) => {
         <p className="mb-9">{msg}</p>
         <div className=" flex items-center gap-3">
           <div className="avatar">
-            <div className="w-20 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
+            <div className="w-16 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
               <img src={img} alt="" />
             </div>
           </div>

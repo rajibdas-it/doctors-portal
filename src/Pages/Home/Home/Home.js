@@ -16,6 +16,7 @@ const Home = () => {
       <Exception></Exception>
       <HomeAppointment></HomeAppointment>
       <Testimonial></Testimonial>
+      <ContactUs></ContactUs>
     </div>
   );
 };
