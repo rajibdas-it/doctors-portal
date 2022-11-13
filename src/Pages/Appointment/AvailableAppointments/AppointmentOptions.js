@@ -1,10 +1,10 @@
 import React from "react";
 import PrimaryButton from "../../Components/PrimaryButton";
 
-const AppointmentOptions = ({ AppointmentOption }) => {
+const AppointmentOptions = ({ AppointmentOption, setTreatment }) => {
   const { name, slots, _id } = AppointmentOption;
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card w-full bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="text-secondary text-center text-2xl font-bold">
           {name}
@@ -16,7 +16,14 @@ const AppointmentOptions = ({ AppointmentOption }) => {
           {slots.length} {slots.length > 1 ? "spaces" : "space"} available
         </p>
         <div className="card-actions justify-center">
-          <PrimaryButton>Book Appointment</PrimaryButton>
+          <label
+            disabled={slots.length === 0}
+            onClick={() => setTreatment(AppointmentOption)}
+            htmlFor="booking-modal"
+            className="btn bg-gradient-to-r from-secondary to-primary border-none"
+          >
+            Book Appointment
+          </label>
         </div>
       </div>
     </div>
