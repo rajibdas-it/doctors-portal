@@ -1,11 +1,19 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { AuthContext } from "../../AuthContext/AuthProvider";
 
 const Login = () => {
   const { loginUser, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const {
     register,
     handleSubmit,
@@ -19,7 +27,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
-        navigate("/home");
+        navigate(from, { replace: true });
       })
       .catch((err) => console.log(err));
   };
@@ -28,7 +36,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
-        navigate("/home");
+        // navigate("/home");
       })
       .catch((err) => console.log(err));
   };
@@ -66,7 +74,9 @@ const Login = () => {
               })}
             />
             <label className="label">
-              <span className="label-text">Forget password?</span>
+              <span className="label-text">
+                <Link to="/resetpassword">Forgot password?</Link>
+              </span>
             </label>
 
             {errors.password && (
