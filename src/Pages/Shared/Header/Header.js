@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../AuthContext/AuthProvider";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogout = () => {
+    logOut()
+      .then((res) => {})
+      .catch((err) => console.log(err));
+  };
   const menuItem = (
     <>
       <li>
@@ -19,9 +26,23 @@ const Header = () => {
       <li>
         <Link to="/contact-us">Contact Us</Link>
       </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
+      {user?.uid ? (
+        <>
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <Link to="/login">
+            <button className="btn btn-outline" onClick={handleLogout}>
+              Log out
+            </button>
+          </Link>
+          <p>{user?.displayName ? user.displayName : "no username set yet"}</p>
+        </>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </>
   );
   return (

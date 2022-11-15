@@ -1,15 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext/AuthProvider";
 
 const Login = () => {
+  const { loginUser, googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const handleLogin = (data) => console.log(data);
+  const handleLogin = (data) => {
+    const email = data.email;
+    const password = data.password;
+    loginUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        navigate("/home");
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        navigate("/home");
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="h-[800px] flex flex-col justify-center items-center">
       <div className="w-96">
@@ -37,12 +59,16 @@ const Login = () => {
               </span>
             </label>
             <input
-              type="text"
+              type="password"
               className="input input-bordered w-full"
               {...register("password", {
                 required: "Password field is required",
               })}
             />
+            <label className="label">
+              <span className="label-text">Forget password?</span>
+            </label>
+
             {errors.password && (
               <p className="text-red-500">{errors.password?.message}</p>
             )}
@@ -61,6 +87,7 @@ const Login = () => {
         </p>
         <div className="divider">OR</div>
         <input
+          onClick={handleGoogleSignIn}
           type="submit"
           value="continue with google"
           className="btn btn-outline w-full"
