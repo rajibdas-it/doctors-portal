@@ -2,19 +2,35 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const handleLogin = (data) => console.log(data);
+  const handleSignup = (data) => console.log(data);
   return (
     <div className="h-[800px] flex flex-col justify-center items-center">
       <div className="w-96">
-        <h1 className="text-2xl font-bold text-center">Login</h1>
-        <form onSubmit={handleSubmit(handleLogin)}>
+        <h1 className="text-2xl font-bold text-center">Register</h1>
+        <form onSubmit={handleSubmit(handleSignup)}>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">
+                Username <span className="text-red-500">*</span>
+              </span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              {...register("username", {
+                required: "Username field is required",
+              })}
+            />
+            {errors.username && (
+              <p className="text-red-500">{errors.username?.message}</p>
+            )}
+          </div>
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text">
@@ -41,6 +57,15 @@ const Login = () => {
               className="input input-bordered w-full"
               {...register("password", {
                 required: "Password field is required",
+                minLength: {
+                  value: 6,
+                  message: "Password should be at least 6 or more characters",
+                },
+                pattern: {
+                  value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/,
+                  message:
+                    "Please use at least one uppercase letter, one special character and one number.",
+                },
               })}
             />
             {errors.password && (
@@ -49,14 +74,14 @@ const Login = () => {
           </div>
           <input
             type="submit"
-            value="Login"
+            value="Signup"
             className="btn btn-accent w-full"
           />
         </form>
         <p className="mt-3">
-          New to doctor portal website?{" "}
-          <Link to="/signup">
-            <span className="text-secondary underline">signup</span>
+          Already have an account?{" "}
+          <Link to="/login">
+            <span className="text-secondary underline">login</span>
           </Link>
         </p>
         <div className="divider">OR</div>
@@ -70,4 +95,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
