@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Link,
-  useLoaderData,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext/AuthProvider";
 
 const Login = () => {
