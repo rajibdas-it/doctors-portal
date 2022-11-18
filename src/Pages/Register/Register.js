@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext/AuthProvider";
 
@@ -19,9 +20,12 @@ const Register = () => {
     createUser(email, password)
       .then((result) => {
         const user = result.user;
-        updateUserInfo(username);
-        console.log(user);
-        navigate("/home");
+        const userInfo = { displayName: username };
+        updateUserProfile(userInfo)
+          .then(() => {
+            saveUser(email, username);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -30,15 +34,26 @@ const Register = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
+        toast.success("user created successfully");
         navigate("/home");
       })
       .catch((err) => console.log(err));
   };
-  const updateUserInfo = (username) => {
-    const userInfo = { displayName: username };
-    updateUserProfile(userInfo)
-      .then(() => {})
-      .catch((err) => console.log(err));
+
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        navigate("/home");
+      });
   };
   return (
     <div className="h-[800px] flex flex-col justify-center items-center">

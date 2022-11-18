@@ -1,29 +1,58 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../../AuthContext/AuthProvider";
+import moment from "moment";
+import toast from "react-hot-toast";
 
-const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
+const BookingModal = ({ treatment, setTreatment, selectedDate, refetch }) => {
+  const { user } = useContext(AuthContext);
+  const createdDate = moment().format("MMMM Do YYYY, h:mm:ss a");
+  // console.log(user.email);
+  // const userEmail = {
+  //   email: user.email,
+  // };
+  // console.log(treatment);
   const { name, slots } = treatment;
   const date = format(selectedDate, "PP");
   const handleBooking = (event) => {
     event.preventDefault();
     const form = event.target;
     const slot = form.slot.value;
-    const name = form.name.value;
-    const email = form.email.value;
-    const phone = form.phone.value;
+    const paitentName = form.name.value;
+    const paitentEmail = form.email.value;
+    const paitentPhone = form.phone.value;
 
     // console.log(date, slot, name, email, phone);
 
-    const appointment = {
+    const booking = {
+      postedDate: createdDate,
       appointmentDate: date,
+      treatmentName: treatment?.name,
       appointmentShedhule: slot,
-      name,
-      email,
-      phone,
+      paitentName,
+      paitentEmail,
+      paitentPhone,
     };
-    console.log(appointment);
-    setTreatment(null); //modal ta auto close korar jonno.
+    // console.log(booking);
+    fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          setTreatment(null);
+          toast.success("Your booking confirmed");
+          refetch();
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
+  //modal ta auto close korar jonno.
   return (
     <>
       {/* Put this part before </body> tag */}
@@ -46,20 +75,26 @@ const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
             />
             <div>
               <select name="slot" className="select select-bordered w-full">
-                {slots.map((slot) => (
-                  <option value={slot}>{slot}</option>
+                {slots.map((slot, i) => (
+                  <option key={i} value={slot}>
+                    {slot}
+                  </option>
                 ))}
               </select>
             </div>
             <input
               name="name"
               type="text"
+              defaultValue={user?.displayName}
               placeholder="Type your name here"
+              readOnly
               className="input input-bordered w-full"
             />
             <input
               name="email"
               type="email"
+              defaultValue={user?.email}
+              readOnly
               placeholder="Type your email here"
               className="input input-bordered w-full"
             />
