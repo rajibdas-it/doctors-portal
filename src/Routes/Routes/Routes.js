@@ -9,6 +9,7 @@ import ForgetPassword from "../../Pages/ForgetPassword/ForgetPassword";
 import Home from "../../Pages/Home/Home/Home";
 import Login from "../../Pages/Login/Login";
 import Register from "../../Pages/Register/Register";
+import AdminRoute from "../AdminRoutes/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -47,7 +48,14 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         element: <MyAppointment></MyAppointment>,
       },
-      { path: "/dashboard/allusers", element: <AllUser></AllUser> },
+      {
+        path: "/dashboard/allusers",
+        element: (
+          <AdminRoute>
+            <AllUser></AllUser>
+          </AdminRoute>
+        ),
+      },
     ],
   },
 ]);
