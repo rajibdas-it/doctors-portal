@@ -4,13 +4,19 @@ import { AuthContext } from "../../../AuthContext/AuthProvider";
 
 const MyAppointment = () => {
   const { user } = useContext(AuthContext);
-  const url = `http://localhost:5000/bookings?email=${user.email}`;
+  const url = `http://localhost:5000/bookings?email=${user?.email}`;
+  // console.log(user.email);
 
   const { data: bookings = [] } = useQuery({
-    queryKey: ["bookings"],
-    queryFn: () => fetch(url).then((res) => res.json()),
+    queryKey: ["bookings", user?.email],
+    queryFn: () =>
+      fetch(url, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res) => res.json()),
   });
-  //   console.log(bookings);
+
   return (
     <div>
       <h1 className="text-3xl mb-5">My Appointments</h1>
@@ -29,10 +35,10 @@ const MyAppointment = () => {
             {bookings.map((booking, i) => (
               <tr key={booking._id}>
                 <th>{i + 1}</th>
-                <td>{booking.paitentName}</td>
-                <td>{booking.treatmentName}</td>
-                <td>{booking.appointmentDate}</td>
-                <td>{booking.appointmentShedhule}</td>
+                <td>{booking?.paitentName}</td>
+                <td>{booking?.treatmentName}</td>
+                <td>{booking?.appointmentDate}</td>
+                <td>{booking?.appointmentShedhule}</td>
               </tr>
             ))}
           </tbody>
