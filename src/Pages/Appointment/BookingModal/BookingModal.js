@@ -12,7 +12,7 @@ const BookingModal = ({ treatment, setTreatment, selectedDate, refetch }) => {
   //   email: user.email,
   // };
   // console.log(treatment);
-  const { name, slots } = treatment;
+  const { name, slots, price } = treatment;
   const date = format(selectedDate, "PP");
   const handleBooking = (event) => {
     event.preventDefault();
@@ -32,6 +32,7 @@ const BookingModal = ({ treatment, setTreatment, selectedDate, refetch }) => {
       paitentName,
       paitentEmail,
       paitentPhone,
+      price,
     };
     // console.log(booking);
     fetch("http://localhost:5000/bookings", {
